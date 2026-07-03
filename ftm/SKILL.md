@@ -1,6 +1,6 @@
 ---
 name: ftm
-description: Use when writing, reviewing, or adopting tests under Farid Testing Methodology: falsification intent tags, test-your-oracle, anomaly tests, defensive branches, architecture-boundary scanners, G-BRANCH/G-BOUNDARY gates, and ratchets.
+description: Use when writing, reviewing, or adopting high-assurance tests for code that can change external state: governance/control planes, promotion or reconciliation flows, recovery/self-healing loops, cloud/database/message-queue seams, canonical registries, operator-facing automation, architecture boundaries, falsification intent tags, test-your-oracle, anomaly tests, defensive branches, G-BRANCH/G-BOUNDARY gates, and ratchets.
 ---
 
 # Farid Testing Methodology
@@ -8,6 +8,8 @@ description: Use when writing, reviewing, or adopting tests under Farid Testing 
 FTM makes testing falsification-first. A test tries to refute a belief, names that intent, proves its oracle can fail, and chooses the narrowest target/generation pair that exercises the behavior through the public interface.
 
 Use FTM as a hard gate for control planes, data mutation, recovery/self-healing, governance tooling, and automation that changes external state. For prototypes, UI glue, and small scripts, use it as a checklist.
+
+The core smell is not "needs more tests." The core smell is "a false belief could survive the test suite": a retry that half-writes state, a scanner that never catches its forbidden import, a happy path that misses fail-closed behavior, a fake that accepts impossible writes, a control-plane boundary that can be bypassed, or a new test that says what it does but not what belief it tries to refute.
 
 ## Non-Negotiables
 
@@ -79,4 +81,3 @@ When adopting FTM in a repo that does not already use it, do not rewrite the who
 5. Mark and cover defensive branches as they are touched.
 
 Use [adoption.md](adoption.md) for the full adoption checklist.
-
