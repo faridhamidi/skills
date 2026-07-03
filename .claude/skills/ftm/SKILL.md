@@ -1,6 +1,6 @@
 ---
 name: ftm
-description: Use when writing, reviewing, or adopting high-assurance tests for code that can change external state: governance/control planes, promotion or reconciliation flows, recovery/self-healing loops, cloud/database/message-queue seams, canonical registries, operator-facing automation, architecture boundaries, falsification intent tags, test-your-oracle, anomaly tests, defensive branches, G-BRANCH/G-BOUNDARY gates, and ratchets.
+description: "Use when writing, reviewing, or adopting high-assurance tests for code that can change external state: governance/control planes, promotion or reconciliation flows, recovery/self-healing loops, cloud/database/message-queue seams, canonical registries, operator-facing automation, architecture boundaries, falsification intent tags, test-your-oracle, anomaly tests, defensive branches, G-BRANCH/G-BOUNDARY gates, and ratchets."
 ---
 
 # Farid Testing Methodology
