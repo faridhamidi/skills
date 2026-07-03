@@ -11,7 +11,9 @@ Use FTM as a hard gate for control planes, data mutation, recovery/self-healing,
 
 The smell is not "needs more tests." The smell is "a false belief could survive": a retry half-writes state, a scanner never catches its forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
 
-## Non-Negotiables
+## Hard-Gate Non-Negotiables
+
+These are mandatory for control planes, data mutation, recovery/self-healing, governance tooling, and external-state automation.
 
 - Every new or changed test declares exactly one intent tag: `Falsifies:`, `Regresses:`, or `Confirms:`.
 - Falsification is the default for any sharp contract, decision, invariant, seam, or failure path.
