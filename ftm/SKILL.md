@@ -1,21 +1,21 @@
 ---
 name: ftm
-description: "Use when writing, reviewing, or adopting high-assurance tests for code that can change external state: governance/control planes, promotion or reconciliation flows, recovery/self-healing loops, cloud/database/message-queue seams, canonical registries, operator-facing automation, architecture boundaries, falsification intent tags, test-your-oracle, anomaly tests, defensive branches, G-BRANCH/G-BOUNDARY gates, and ratchets."
+description: "Use FTM when writing, reviewing, or adopting high-assurance tests for state-changing systems: falsification intent tags, oracle meta-tests, anomaly/recovery tests, architecture-boundary gates, defensive branches, and ratchets."
 ---
 
 # Farid Testing Methodology
 
-FTM makes testing falsification-first. A test tries to refute a belief, names that intent, proves its oracle can fail, and chooses the narrowest target/generation pair that exercises the behavior through the public interface.
+FTM is falsification-first testing. Each test tries to break a belief, names that belief, proves its oracle can fail, and gates the seam that could otherwise drift.
 
 Use FTM as a hard gate for control planes, data mutation, recovery/self-healing, governance tooling, and automation that changes external state. For prototypes, UI glue, and small scripts, use it as a checklist.
 
-The core smell is not "needs more tests." The core smell is "a false belief could survive the test suite": a retry that half-writes state, a scanner that never catches its forbidden import, a happy path that misses fail-closed behavior, a fake that accepts impossible writes, a control-plane boundary that can be bypassed, or a new test that says what it does but not what belief it tries to refute.
+The smell is not "needs more tests." The smell is "a false belief could survive": a retry half-writes state, a scanner never catches its forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
 
 ## Non-Negotiables
 
 - Every new or changed test declares exactly one intent tag: `Falsifies:`, `Regresses:`, or `Confirms:`.
 - Falsification is the default for any sharp contract, decision, invariant, seam, or failure path.
-- Any assertion helper, invariant helper, scanner, or oracle you add gets a meta-test with known-bad input proving it fails.
+- Any assertion helper, invariant helper, scanner, or oracle you add gets a known-bad meta-test proving it fails.
 - Every external seam gets at least one fault-injection test. Every retry, recovery, or multi-step failure path gets an anomaly test.
 - Every protected architecture seam gets the three-layer boundary pattern: scanner, explicit manifest, scanner meta-tests plus real-file enforcement.
 - Tests must not hit real network, database, cloud SDK, clock, or filesystem services when a unit-level seam exists; use small stateful fakes that enforce the real contract.
@@ -58,26 +58,18 @@ Use [intent-tags.md](intent-tags.md) when choosing or wording an intent tag.
 
 ## Decision Recipe
 
-- Pure decision function: use a decision-table oracle, `Falsifies:`, cross-product or boundary-value inputs, and enroll it in G-BRANCH.
-- Property that must always hold after operations: add or extend an invariant `assert_*` helper, call it from behavior tests, and meta-test the helper with known-bad input.
-- External or wire data: pair contract acceptance with a falsifier proving unknown fields, wrong types, or missing required values fail closed.
-- Protected resource behind a seam: use the architecture-boundary pattern; exempt only the sanctioned adapter and meta-test the scanner.
+- Pure decision: use a decision-table oracle, `Falsifies:`, cross-product or boundary-value inputs, and enroll it in G-BRANCH.
+- Invariant: add or extend an `assert_*` helper, call it from behavior tests, and meta-test it with known-bad input.
+- Contract: pair acceptance with a falsifier proving unknown fields, wrong types, or missing required values fail closed.
+- Boundary: use the architecture-boundary pattern; exempt only the sanctioned adapter and meta-test the scanner.
 - Optimistic concurrency or racing writers: test against a stateful fake/model that enforces the storage contract, plus fault injection on the conflict path.
-- Retry, recovery, or multi-step failure: use Method A anomaly testing; write the permanent fail-closed case before implementing retry logic.
-- Branch that "cannot happen if upstream is correct": mark it `# DEFENSIVE` and add Method B bypass coverage in the same change.
-- Existing-state behavior change: prove the blast radius is bounded with a conservation invariant and an explicit diff/report where useful.
+- Recovery: use Method A anomaly testing; write the permanent fail-closed case before implementing retry logic.
+- Defensive branch: mark it `# DEFENSIVE` and add Method B bypass coverage in the same change.
+- Blast radius: prove fields you must not touch are conserved, with an explicit diff/report where useful.
 - Wiring, UI, or glue: `Confirms:` is acceptable, but still fault-inject any external call.
 
 Read [anomaly-testing.md](anomaly-testing.md), [defensive-branches.md](defensive-branches.md), [architecture-boundaries.md](architecture-boundaries.md), or [ratchets-and-gates.md](ratchets-and-gates.md) only when their trigger appears.
 
 ## Adoption
 
-When adopting FTM in a repo that does not already use it, do not rewrite the whole suite. Add green-on-arrival ratchets that may only tighten.
-
-1. Add the intent-tag ratchet and baseline existing untagged tests.
-2. Identify pure decision modules and wire G-BRANCH for them only.
-3. Identify seams that must not be bypassed and add boundary scanners one seam at a time.
-4. Find retry/recovery paths and add anomaly tests, permanent case first.
-5. Mark and cover defensive branches as they are touched.
-
-Use [adoption.md](adoption.md) for the full adoption checklist.
+When adopting FTM in a repo, do not rewrite the suite. Add green-on-arrival ratchets that may only tighten. Use [adoption.md](adoption.md) for the checklist.
