@@ -23,20 +23,57 @@ ARTIFACT_PATH = re.compile(
 )
 
 
-def parse_frontmatter(path: Path) -> dict[str, str]:
+def parse_frontmatter(path: Path) -> tuple[dict[str, str], list[str]]:
     match = FRONTMATTER.match(path.read_text())
     if not match:
-        return {}
+        return {}, ["frontmatter block is missing or malformed"]
     values: dict[str, str] = {}
+    errors: list[str] = []
     for line in match.group(1).splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if line[0].isspace():
+            if not re.fullmatch(r"\s+[A-Za-z_][A-Za-z0-9_-]*:\s*.*", line):
+                errors.append(f"malformed frontmatter line: {line!r}")
+            continue
         scalar = YAML_SCALAR.match(line)
         if not scalar:
+            errors.append(f"malformed frontmatter line: {line!r}")
+            continue
+        key = scalar.group(1)
+        if key in values:
+            errors.append(f"duplicate frontmatter key: {key}")
             continue
         value = scalar.group(2)
         if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
             value = value[1:-1]
-        values[scalar.group(1)] = value
-    return values
+        values[key] = value
+    return values, errors
+
+
+def strip_fenced_code(text: str) -> str:
+    output: list[str] = []
+    fence_character = ""
+    fence_length = 0
+    for line in text.splitlines():
+        if not fence_character:
+            opening = re.match(r"^\s*(`{3,}|~{3,})", line)
+            if opening:
+                marker = opening.group(1)
+                fence_character = marker[0]
+                fence_length = len(marker)
+                output.append("")
+                continue
+            output.append(line)
+            continue
+        if re.match(
+            rf"^\s*{re.escape(fence_character)}{{{fence_length},}}\s*$",
+            line,
+        ):
+            fence_character = ""
+            fence_length = 0
+        output.append("")
+    return "\n".join(output)
 
 
 def markdown_anchor(heading: str) -> str:
@@ -53,7 +90,7 @@ def markdown_anchor(heading: str) -> str:
 def anchors_in(path: Path) -> set[str]:
     anchors: set[str] = set()
     counts: dict[str, int] = {}
-    for line in path.read_text().splitlines():
+    for line in strip_fenced_code(path.read_text()).splitlines():
         match = HEADING.match(line)
         if not match:
             continue
@@ -114,16 +151,16 @@ def validate_markdown_links(root: Path) -> list[str]:
     errors: list[str] = []
     for markdown in markdown_files(root):
         text = markdown.read_text()
-        for raw_target in MARKDOWN_LINK.findall(text):
+        prose = strip_fenced_code(text)
+        prose = re.sub(r"`[^`]*`", "", prose)
+        for raw_target in MARKDOWN_LINK.findall(prose):
             errors.extend(validate_markdown_target(root, markdown, raw_target))
         definitions = {
             identifier.casefold(): target
-            for identifier, target in REFERENCE_DEFINITION.findall(text)
+            for identifier, target in REFERENCE_DEFINITION.findall(prose)
         }
         for raw_target in definitions.values():
             errors.extend(validate_markdown_target(root, markdown, raw_target))
-        prose = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
-        prose = re.sub(r"`[^`]*`", "", prose)
         for label, identifier in REFERENCE_USE.findall(prose):
             normalized = (identifier or label).casefold()
             if normalized not in definitions:
@@ -143,7 +180,11 @@ def validate_skill_metadata(root: Path) -> list[str]:
         if not skill_file.is_file():
             errors.append(f"{skill_dir.relative_to(root)}: SKILL.md is missing")
             continue
-        metadata = parse_frontmatter(skill_file)
+        metadata, frontmatter_errors = parse_frontmatter(skill_file)
+        errors.extend(
+            f"{skill_file.relative_to(root)}: {error}"
+            for error in frontmatter_errors
+        )
         name = metadata.get("name", "")
         description = metadata.get("description", "")
         if name != skill_dir.name:
@@ -166,7 +207,8 @@ def validate_artifact_references(root: Path) -> list[str]:
         return []
     for skill_dir in sorted(path for path in skills_root.iterdir() if path.is_dir()):
         for markdown in skill_dir.rglob("*.md"):
-            text = re.sub(r"https?://\S+", "", markdown.read_text())
+            text = strip_fenced_code(markdown.read_text())
+            text = re.sub(r"https?://\S+", "", text)
             for relative_path in ARTIFACT_PATH.findall(text):
                 relative_path = relative_path.rstrip(".,;:)")
                 target = (
@@ -230,25 +272,101 @@ def validate_steering_copies(root: Path) -> list[str]:
     return errors
 
 
-def parse_openai_interface(text: str) -> tuple[dict[str, str] | None, str | None]:
-    lines = [line for line in text.splitlines() if line.strip() and not line.lstrip().startswith("#")]
-    if not lines or lines[0] != "interface:":
+def parse_json_string(value_text: str, line: str) -> tuple[str | None, str | None]:
+    try:
+        value = json.loads(value_text)
+    except json.JSONDecodeError:
+        return None, f"malformed OpenAI metadata scalar: {line!r}"
+    if not isinstance(value, str):
+        return None, f"OpenAI metadata value must be a quoted string: {line!r}"
+    return value, None
+
+
+def split_openai_sections(text: str) -> tuple[dict[str, list[str]] | None, str | None]:
+    lines = [
+        line
+        for line in text.splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    ]
+    if "interface:" not in lines:
         return None, "interface mapping is missing"
-    values: dict[str, str] = {}
+    sections: dict[str, list[str]] = {}
+    current = ""
+    for line in lines:
+        if not line[0].isspace():
+            match = re.fullmatch(r"([A-Za-z_][A-Za-z0-9_]*):", line)
+            if not match:
+                return None, f"malformed OpenAI metadata line: {line!r}"
+            current = match.group(1)
+            if current not in {"interface", "dependencies", "policy"}:
+                return None, f"unsupported OpenAI metadata section: {current}"
+            if current in sections:
+                return None, f"duplicate OpenAI metadata section: {current}"
+            sections[current] = []
+            continue
+        if not current:
+            return None, f"malformed OpenAI metadata line: {line!r}"
+        sections[current].append(line)
+    return sections, None
+
+
+def validate_openai_policy(lines: list[str]) -> str | None:
+    seen = False
+    for line in lines:
+        match = re.fullmatch(r"  allow_implicit_invocation:\s*(true|false)", line)
+        if not match or seen:
+            return f"malformed OpenAI policy line: {line!r}"
+        seen = True
+    return None
+
+
+def validate_openai_dependencies(lines: list[str]) -> str | None:
+    if not lines or lines[0] != "  tools:":
+        return "OpenAI dependencies must contain a tools list"
+    allowed_keys = {"type", "value", "description", "transport", "url"}
+    current_tool: dict[str, str] | None = None
     for line in lines[1:]:
+        start = re.fullmatch(r"    - ([A-Za-z_][A-Za-z0-9_]*):\s*(.+)", line)
+        continuation = re.fullmatch(r"      ([A-Za-z_][A-Za-z0-9_]*):\s*(.+)", line)
+        if start:
+            current_tool = {}
+            key, value_text = start.groups()
+        elif continuation and current_tool is not None:
+            key, value_text = continuation.groups()
+        else:
+            return f"malformed OpenAI dependency line: {line!r}"
+        if key not in allowed_keys or key in current_tool:
+            return f"invalid OpenAI dependency key: {key}"
+        value, error = parse_json_string(value_text, line)
+        if error:
+            return error
+        current_tool[key] = value or ""
+    return None
+
+
+def parse_openai_interface(text: str) -> tuple[dict[str, str] | None, str | None]:
+    sections, section_error = split_openai_sections(text)
+    if sections is None:
+        return None, section_error
+    policy_error = validate_openai_policy(sections.get("policy", []))
+    if policy_error:
+        return None, policy_error
+    if "dependencies" in sections:
+        dependencies_error = validate_openai_dependencies(sections["dependencies"])
+        if dependencies_error:
+            return None, dependencies_error
+    values: dict[str, str] = {}
+    for line in sections["interface"]:
         match = re.fullmatch(r"  ([A-Za-z_][A-Za-z0-9_]*):\s*(.+)", line)
         if not match:
             return None, f"malformed OpenAI metadata line: {line!r}"
         key = match.group(1)
         if key in values:
             return None, f"duplicate OpenAI metadata key: {key}"
-        try:
-            value = json.loads(match.group(2))
-        except json.JSONDecodeError:
-            return None, f"malformed OpenAI metadata scalar: {line!r}"
-        if not isinstance(value, str):
-            return None, f"OpenAI metadata value must be a quoted string: {line!r}"
-        values[key] = value
+        value, error = parse_json_string(match.group(2), line)
+        if error:
+            return None, error
+        values[key] = value or ""
     return values, None
 
 

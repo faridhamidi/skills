@@ -67,6 +67,36 @@ class RepositoryValidationTests(unittest.TestCase):
         self.assertTrue(any("missing.md" in error for error in errors))
         self.assertTrue(any("not-a-heading" in error for error in errors))
 
+    def test_ignores_links_inside_fenced_examples(self):
+        def mutate(root):
+            guide = root / "skills/example-skill/references/guide.md"
+            guide.write_text(
+                "# Guide\n\n## Specific section\n\n"
+                "```markdown\n"
+                "[inline](missing-inline.md)\n"
+                "[reference][missing]\n\n"
+                "[missing]: missing-reference.md\n"
+                "```\n"
+            )
+
+        self.assertEqual(self.validate_fixture(mutate), [])
+
+    def test_rejects_links_to_headings_that_exist_only_inside_fences(self):
+        def mutate(root):
+            guide = root / "skills/example-skill/references/guide.md"
+            guide.write_text("# Guide\n\n```text\n# Phantom heading\n```\n")
+            skill = root / "skills/example-skill/SKILL.md"
+            skill.write_text(
+                skill.read_text().replace(
+                    "references/guide.md#specific-section",
+                    "references/guide.md#phantom-heading",
+                )
+            )
+
+        errors = self.validate_fixture(mutate)
+
+        self.assertTrue(any("phantom-heading" in error for error in errors))
+
     def test_rejects_reference_style_links_to_missing_targets(self):
         def mutate(root):
             guide = root / "skills/example-skill/references/guide.md"
@@ -108,6 +138,23 @@ class RepositoryValidationTests(unittest.TestCase):
 
         self.assertTrue(any("must match directory" in error for error in errors))
         self.assertTrue(any("description" in error for error in errors))
+
+    def test_rejects_malformed_and_duplicate_frontmatter_entries(self):
+        def mutate(root):
+            skill = root / "skills/example-skill/SKILL.md"
+            skill.write_text(
+                "---\n"
+                "name: example-skill\n"
+                "name: duplicate-name\n"
+                "description: Use when an example skill is required.\n"
+                "malformed frontmatter !\n"
+                "---\n"
+            )
+
+        errors = self.validate_fixture(mutate)
+
+        self.assertTrue(any("duplicate frontmatter key" in error for error in errors))
+        self.assertTrue(any("malformed frontmatter" in error for error in errors))
 
     def test_rejects_readme_registry_drift(self):
         errors = self.validate_fixture(
@@ -205,6 +252,27 @@ class RepositoryValidationTests(unittest.TestCase):
         errors = self.validate_fixture(mutate)
 
         self.assertTrue(any("malformed" in error for error in errors))
+
+    def test_accepts_supported_openai_top_level_sections(self):
+        def mutate(root):
+            metadata = root / "skills/example-skill/agents/openai.yaml"
+            metadata.write_text(
+                'interface:\n'
+                '  display_name: "Example Skill"\n'
+                '  short_description: "Apply the example skill when required"\n'
+                '  default_prompt: "Use $example-skill to handle this example."\n'
+                'dependencies:\n'
+                '  tools:\n'
+                '    - type: "mcp"\n'
+                '      value: "github"\n'
+                '      description: "GitHub access"\n'
+                '      transport: "streamable_http"\n'
+                '      url: "https://example.test/mcp"\n'
+                'policy:\n'
+                '  allow_implicit_invocation: false\n'
+            )
+
+        self.assertEqual(self.validate_fixture(mutate), [])
 
     def test_rejects_invalid_openai_quoted_scalars(self):
         def mutate(root):
