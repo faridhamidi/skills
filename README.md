@@ -30,7 +30,11 @@ will hold.
 
 ## Install
 
-Copy the skill folder into the runtime that should discover it:
+Copy the skill folder into the runtime that should discover it. Prefer the project-scoped
+target over the personal/global one: these skills are opinionated and carry real gates (hard
+merge blocks, mandatory tags, burden-of-proof postures), and loading them globally applies that
+weight to every repo you open, including ones where it's disproportionate. Install globally only
+for a skill you want active everywhere, deliberately.
 
 ```bash
 # Codex personal skill
