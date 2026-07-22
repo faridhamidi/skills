@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering Model"
+  short_description: "Guide safe, proportionate engineering changes"
+  default_prompt: "Use $engineering-model to classify this change and apply the lightest engineering controls it earns."

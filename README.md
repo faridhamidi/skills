@@ -10,6 +10,7 @@ The repo keeps one canonical copy of each skill. Runtime-specific folders such a
 
 | Skill | Use for |
 | --- | --- |
+| [`engineering-model`](skills/engineering-model/) | Revertible-envelope guidance for safe engineering changes, external-effect approval, recoverable commits, proportional tests, Core boundaries, and governed automation controls. |
 | [`ptm`](skills/ptm/) | Popperian Testing Methodology: falsification-first testing for high-assurance code that changes external state, including intent tags, oracle meta-tests, anomaly tests, defensive branches, architecture-boundary scanners, gates, and ratchets. |
 
 ## Layout
@@ -23,15 +24,20 @@ Install the same folder into the runtime that should discover it:
 
 ```bash
 # Codex personal skill
-cp -R skills/ptm ~/.codex/skills/ptm
+cp -R skills/<skill-name> ~/.codex/skills/<skill-name>
 
 # Claude Code personal skill
-cp -R skills/ptm ~/.claude/skills/ptm
+cp -R skills/<skill-name> ~/.claude/skills/<skill-name>
 
 # Claude Code project skill
 mkdir -p .claude/skills
-cp -R skills/ptm .claude/skills/ptm
+cp -R skills/<skill-name> .claude/skills/<skill-name>
 ```
+
+Some skills also ship runtime steering assets. `engineering-model` includes
+`assets/AGENTS.md`, `assets/CLAUDE.md`, and `assets/steering.md`; copy the matching
+block into the runtime's always-on instruction file so the skill is loaded before
+external effects, executable behavior changes, and other load-bearing engineering work.
 
 ## Maintenance
 
