@@ -1,0 +1,4 @@
+interface:
+  display_name: "Popperian Testing Methodology"
+  short_description: "Design falsification-first high-assurance tests"
+  default_prompt: "Use $ptm to design tests that challenge this system's critical assumptions."

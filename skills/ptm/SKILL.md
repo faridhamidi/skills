@@ -1,13 +1,22 @@
 ---
 name: ptm
-description: "Use PTM when writing, reviewing, or adopting high-assurance tests for state-changing systems: falsification intent tags, oracle meta-tests, anomaly/recovery tests, architecture-boundary gates, defensive branches, and ratchets."
+description: "Use when writing, reviewing, or adopting high-assurance tests for control planes, data mutation, recovery or self-healing, governance tooling, or automation that changes external state."
 ---
 
 # Popperian Testing Methodology
 
 PTM is falsification-first testing. Each test tries to break a belief, names that belief, proves its oracle can fail, and gates the seam that could otherwise drift.
 
-Use PTM as a hard gate for control planes, data mutation, recovery/self-healing, governance tooling, and automation that changes external state. For prototypes, UI glue, and small scripts, use it as a checklist.
+Use PTM as a hard gate when a changed control-plane, data-mutation, recovery,
+governance, or external-state automation surface can cause consequential state,
+authority, or recovery harm. For prototypes, UI glue, and small scripts, use it as a
+checklist.
+
+When Engineering Model also applies, it owns risk classification and decides whether
+this high-assurance testing profile is earned. Apply the obligations below to changed or
+newly protected behavior and its directly affected seams. Do not retrofit unrelated
+historical tests or introduce repository-wide scanners, manifests, and ratchets unless
+the change adopts PTM for that broader surface or a concrete bypass risk requires them.
 
 The smell is not "needs more tests." The smell is "a false belief could survive": a retry half-writes state, a scanner never catches its forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
 

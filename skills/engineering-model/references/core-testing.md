@@ -166,7 +166,3 @@ Known-bad case proving the oracle:
 External seams and injected faults:
 Evidence boundary:
 ```
-
-## Repository witness
-
-The examples under [`../examples/`](../examples/) run in CI with the Python standard library. They demonstrate structural call-site checks, a manifest-backed conformance harness, runtime authority checks, fail-closed validation, idempotent reconciliation, and boundary ratchets. They are deliberately smaller than a reference application so the tested property remains visible.

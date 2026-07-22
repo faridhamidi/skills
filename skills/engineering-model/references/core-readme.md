@@ -4,11 +4,10 @@ Adopt this layer independently. It is intended for any non-trivial operational c
 
 ## What it provides
 
-- [`FOUNDATION.md`](FOUNDATION.md) — name meaningful boundaries, declare important system language, and preserve execution context.
-- [`SEMANTIC_CONSISTENCY.md`](SEMANTIC_CONSISTENCY.md) — optionally name shared states, actions, transitions, reasons, outcomes, and recovery semantics when local code and direct tests stop being sufficient.
-- [`TESTING.md`](TESTING.md) — classify tests by intent, target, and input generation; use small structural checks to stop boundary decay.
-- [`DOCUMENTATION.md`](DOCUMENTATION.md) — separate non-binding direction, worked implementation plans, and durable decisions.
-- [`../examples/core_boundaries_python/`](../examples/core_boundaries_python/) — a dependency-free executable witness for boundary and context-propagation checks.
+- [`core-foundation.md`](core-foundation.md) — name meaningful boundaries, declare important system language, and preserve execution context.
+- [`core-semantic-consistency.md`](core-semantic-consistency.md) — optionally name shared states, actions, transitions, reasons, outcomes, and recovery semantics when local code and direct tests stop being sufficient.
+- [`core-testing.md`](core-testing.md) — classify tests by intent, target, and input generation; use small structural checks to stop boundary decay.
+- [`core-documentation.md`](core-documentation.md) — separate non-binding direction, worked implementation plans, and durable decisions.
 
 ## Minimum adoption
 
@@ -24,9 +23,9 @@ No prescribed folder layout is required. A function parameter, wrapper, module s
 
 ## Optional escalation
 
-Use [`SEMANTIC_CONSISTENCY.md`](SEMANTIC_CONSISTENCY.md) when repeated or interacting system language has become load-bearing. Keep direct tests as the default until several stable semantic or structural rules need common discovery and lifecycle.
+Use [`core-semantic-consistency.md`](core-semantic-consistency.md) when repeated or interacting system language has become load-bearing. Keep direct tests as the default until several stable semantic or structural rules need common discovery and lifecycle.
 
-When several structural constraints have stable identities, multiple contributors depend on them, or architectural intent is repeatedly reconstructed, consider escalating direct checks into a [`Repository Conformance Harness`](CONFORMANCE_HARNESS.md).
+When several structural constraints have stable identities, multiple contributors depend on them, or architectural intent is repeatedly reconstructed, consider escalating direct checks into a [`Repository Conformance Harness`](core-conformance-harness.md).
 
 This mechanism is optional. It adds rule lifecycle, ratchets, ownership binding, historical lineage, generic engine tests, and audit reporting. Do not adopt it when two or three direct tests remain clearer.
 
@@ -41,4 +40,4 @@ Using the core layer does not mean the system needs:
 - a governance vocabulary;
 - distributed tracing infrastructure.
 
-Those mechanisms belong only where the problem earns them. See the [Governed Automation Layer](../governed-automation/README.md) and complete its adoption check before using it.
+Those mechanisms belong only where the problem earns them. See the [Governed Automation Layer](governed-readme.md) and complete its adoption check before using it.

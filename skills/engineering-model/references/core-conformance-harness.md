@@ -148,7 +148,7 @@ Required review      = hosting-platform enforcement
 Credentials and roles = authority control
 ```
 
-The executable witness demonstrates detection, CI-executable results, CODEOWNERS correspondence, and audit output. It does not demonstrate required review, protected branches, administrative bypass prevention, autonomous merge, deployment, or production mutation controls.
+A harness can demonstrate detection, CI-executable results, CODEOWNERS correspondence, and audit output. It cannot by itself demonstrate required review, protected branches, administrative bypass prevention, autonomous merge, deployment, or production mutation controls.
 
 ## Human rationale and executable projection
 
@@ -167,7 +167,7 @@ The manifest must point to rationale. It must not duplicate the rationale.
 
 ## Optional semantic-consistency domain
 
-The rationale for shared states, actions, transitions, reasons, outcomes, and recovery semantics belongs in [`SEMANTIC_CONSISTENCY.md`](SEMANTIC_CONSISTENCY.md). A harness rule in this domain must link to that reference or to a more specific product decision; it must not restate the category definitions in the manifest or checker documentation.
+The rationale for shared states, actions, transitions, reasons, outcomes, and recovery semantics belongs in [`core-semantic-consistency.md`](core-semantic-consistency.md). A harness rule in this domain must link to that reference or to a more specific product decision; it must not restate the category definitions in the manifest or checker documentation.
 
 Possible rule families include:
 
@@ -212,7 +212,7 @@ Any deliberate weakening of historical-retention guarantees requires a separate 
 
 ## Ownership and approval boundary
 
-The witness uses exact, already-public CODEOWNERS principals and validates that they cover the manifest and harness enforcement files.
+An implementation should use exact CODEOWNERS principals and validate that they cover the manifest and harness enforcement files.
 
 That correspondence proves ownership declaration and routing, not required-review enforcement. Branch protection and required code-owner review require separate hosting-platform evidence.
 
@@ -222,7 +222,7 @@ All rules stored in one manifest must use an owner set compatible with the CODEO
 
 Rule meanings may be reusable across languages. Checker implementations normally are not.
 
-The witness uses Python AST inspection for:
+A Python implementation may use AST inspection for:
 
 - forbidden imports;
 - exclusive constructor ownership;
@@ -232,7 +232,7 @@ Other repositories may use ecosystem-specific analyzers. No cross-language imple
 
 ## Adoption cost
 
-The full witness in this repository adds **26 new files** plus targeted changes to Core documentation, contribution rules, repository navigation, case-study indexing, and CI. It introduces at least six contributor concepts beyond direct structural testing: lifecycle, enforcement mode, ratchet state, ownership binding, historical lineage, and the separation between per-rule evidence and generic engine tests. It also adds a dedicated fixture tree, three checker adapters, manifest validation, an audit runner, CODEOWNERS maintenance, CI runtime, and a separate review requirement for any future lineage reduction.
+A full harness can introduce several contributor concepts beyond direct structural testing: lifecycle, enforcement mode, ratchet state, ownership binding, historical lineage, and the separation between per-rule evidence and generic engine tests. It may also require fixtures, checker adapters, manifest validation, audit output, CODEOWNERS maintenance, CI runtime, and migration governance.
 
 A product repository should not copy that entire surface by default. A minimal justified adoption may be one manifest, one checker entry point, paired positive and negative tests, and one CI command. Add ratchets, ownership binding, historical records, audit artifacts, and migration governance only when the corresponding pressure exists.
 
@@ -261,7 +261,7 @@ If an automated actor can add rules, weaken checks, approve itself, merge, deplo
 
 ## Evidence boundary
 
-The reusable pattern was extracted from one operational, infrastructure-adjacent system. The witness proves that selected constraints are executable. It does not prove productivity improvement, defect reduction, long-term maintenance cost, universal applicability, or cross-language portability.
+Executable checks prove only the constraints they exercise. They do not prove productivity improvement, defect reduction, long-term maintenance cost, universal applicability, or cross-language portability.
 
 ## Non-goals
 

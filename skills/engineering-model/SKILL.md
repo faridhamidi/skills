@@ -76,6 +76,13 @@ behavior and has run successfully in the current increment. Prefer a direct test
 a ratchet, a ratchet before a manifest-backed harness, and repository-host or substrate
 controls when actual admission or authority must be enforced.
 
+This skill owns risk classification and control selection. Use PTM as the specialized
+testing profile only when the work is writing, reviewing, or adopting high-assurance
+tests for a changed state-changing surface covered by PTM's trigger. PTM obligations
+apply to the changed or newly protected risk surface, not automatically to every
+historical seam in the repository. When PTM does not trigger, this skill's proportional
+test selection remains authoritative.
+
 Add diagnostic context at external, asynchronous, or persistence seams when an
 otherwise silent failure would impede detection or recovery. Preserve operation
 identifiers and meaningful outcome or reason fields where they exist. Do not log every
@@ -103,8 +110,13 @@ baseline. Confirm that git is available, the project is a repository, and a chec
 can be created before relying on git as recovery. If it cannot, do not create a shadow
 repository merely to satisfy the ritual or claim that the envelope exists; preserve the
 local changes and report the constraint. After a coherent increment satisfies its
-declared completion criterion and relevant checks, stage only task-owned changes using
-explicit paths or selective hunks, then commit with a focused message. Never commit
+declared completion criterion and relevant checks, inspect the effective hooks path,
+relevant hooks, configured filters, and commit-time helpers, including filters that may
+run while staging. Only when those mechanisms are known not to perform shared or
+external effects, stage task-owned changes using explicit paths or selective hunks and
+commit with a focused message. Otherwise classify the checkpointing sequence above the
+blast-radius line and obtain approval or leave the work uncommitted. Never bypass
+legitimate controls merely to keep the action local. Never commit
 secrets, generated junk, unrelated changes, or pre-existing user work. Do not rewrite
 existing history automatically. If verification fails unexpectedly, preserve the work
 without reporting the increment as complete. If task-owned changes cannot be isolated

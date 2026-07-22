@@ -1,6 +1,6 @@
 # Principles
 
-These are cross-cutting positions. Model-specific triggers and mechanisms belong in [`MODELS.md`](MODELS.md).
+These are cross-cutting positions. Model-specific triggers and mechanisms belong in [`governed-models.md`](governed-models.md).
 
 ## Begin with the governed decision
 
