@@ -63,3 +63,24 @@ This repository currently has no license. Public visibility and these installati
 instructions do not grant third parties permission to redistribute or reuse the contents
 beyond rights provided by applicable law. Add an explicit license only after choosing the
 intended reuse terms.
+
+## Evaluate
+
+The initial eval pilot compares `ptm` unavailable (control) with the canonical skill
+installed in an otherwise isolated Codex home (treatment). Each trial starts from a
+fresh copy of a deliberately faulty retry/recovery fixture and records the artifact,
+agent output, project tests, and a hidden behavioral oracle.
+
+```bash
+python3 evals/run.py \
+  --case evals/cases/ptm-retry-recovery.json \
+  --condition both \
+  --trials 1
+```
+
+Raw evidence is written beneath the ignored `evals/results/` directory. A successful
+agent process is not automatically a passing outcome: inspect the individual
+`project_tests`, `hidden_oracle`, fault-injection, and intent-tag checks in each
+`result.json`. One paired run validates the harness and provides a case result; it does
+not establish general skill effectiveness. Repeat cases and trials before making a
+reliability claim.
