@@ -1,6 +1,6 @@
 # Ratchets And Gates
 
-FTM uses gates for rules that should block merge and ratchets for rules that must improve without a big-bang rewrite.
+PTM uses gates for rules that should block merge and ratchets for rules that must improve without a big-bang rewrite.
 
 ## G-BRANCH
 

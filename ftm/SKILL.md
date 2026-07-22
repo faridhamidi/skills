@@ -1,13 +1,13 @@
 ---
 name: ftm
-description: "Use FTM when writing, reviewing, or adopting high-assurance tests for state-changing systems: falsification intent tags, oracle meta-tests, anomaly/recovery tests, architecture-boundary gates, defensive branches, and ratchets."
+description: "Use PTM when writing, reviewing, or adopting high-assurance tests for state-changing systems: falsification intent tags, oracle meta-tests, anomaly/recovery tests, architecture-boundary gates, defensive branches, and ratchets."
 ---
 
-# Farid Testing Methodology
+# Popperian Testing Methodology
 
-FTM is falsification-first testing. Each test tries to break a belief, names that belief, proves its oracle can fail, and gates the seam that could otherwise drift.
+PTM is falsification-first testing. Each test tries to break a belief, names that belief, proves its oracle can fail, and gates the seam that could otherwise drift.
 
-Use FTM as a hard gate for control planes, data mutation, recovery/self-healing, governance tooling, and automation that changes external state. For prototypes, UI glue, and small scripts, use it as a checklist.
+Use PTM as a hard gate for control planes, data mutation, recovery/self-healing, governance tooling, and automation that changes external state. For prototypes, UI glue, and small scripts, use it as a checklist.
 
 The smell is not "needs more tests." The smell is "a false belief could survive": a retry half-writes state, a scanner never catches its forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
 
@@ -37,7 +37,7 @@ These are mandatory for control planes, data mutation, recovery/self-healing, go
 4. Make the slice green with minimal implementation.
    Completion criterion: the new test passes, no speculative behavior was added, and existing relevant tests still pass.
 
-5. Add FTM obligations triggered by the slice.
+5. Add PTM obligations triggered by the slice.
    Completion criterion: every triggered oracle meta-test, seam fault injection, anomaly loop, defensive-branch bypass, boundary scanner, ratchet, or gate update has been handled.
 
 6. Refactor only while green.
@@ -48,7 +48,7 @@ These are mandatory for control planes, data mutation, recovery/self-healing, go
 
 ## The Axes
 
-Every FTM test chooses one value from each axis.
+Every PTM test chooses one value from each axis.
 
 | Axis | Question | Values |
 | --- | --- | --- |
@@ -74,4 +74,4 @@ Read [anomaly-testing.md](anomaly-testing.md), [defensive-branches.md](defensive
 
 ## Adoption
 
-When adopting FTM in a repo, do not rewrite the suite. Add green-on-arrival ratchets that may only tighten. Use [adoption.md](adoption.md) for the checklist.
+When adopting PTM in a repo, do not rewrite the suite. Add green-on-arrival ratchets that may only tighten. Use [adoption.md](adoption.md) for the checklist.

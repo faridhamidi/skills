@@ -1,4 +1,4 @@
-# Farid's Skills
+# Popperian's Skills
 
 Personal agent skills packaged for both Codex and Claude Code.
 
@@ -14,7 +14,7 @@ The repo is intentionally cross-agent:
 
 | Skill | Use for |
 | --- | --- |
-| [`ftm`](ftm/) | Farid Testing Methodology: falsification-first testing for high-assurance code that changes external state, including intent tags, oracle meta-tests, anomaly tests, defensive branches, architecture-boundary scanners, gates, and ratchets. |
+| [`ftm`](ftm/) | Popperian Testing Methodology: falsification-first testing for high-assurance code that changes external state, including intent tags, oracle meta-tests, anomaly tests, defensive branches, architecture-boundary scanners, gates, and ratchets. |
 
 ## Layout
 

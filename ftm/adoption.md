@@ -1,6 +1,6 @@
-# Adopting FTM
+# Adopting PTM
 
-Adopt FTM incrementally. Each new gate should be green on arrival and then tighten.
+Adopt PTM incrementally. Each new gate should be green on arrival and then tighten.
 
 ## Checklist
 
