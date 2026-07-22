@@ -10,12 +10,21 @@ The repo keeps one canonical copy of each skill. Runtime-specific folders such a
 
 Skills live under `skills/`. Each skill has its own `SKILL.md` entrypoint plus nearby reference files, so agents can load the main process first and only open deeper material when the task actually needs it.
 
+## Stance
+
+AI-generated output is not trusted by default. Karl Popper — the philosopher of science who
+argued that theories are never confirmed, only ever survive attempts to refute them — is the
+root of the posture here: a claim earns belief by surviving an active attempt to break it, not
+by absence of complaint. Corroboration is cheap; "I tried hard to break it and could not" is the
+only evidence that counts. This repo's skills are two applications of that Popperian stance,
+aimed at two different objects — what a system produces, and what a system is permitted to do.
+
 ## Skills
 
 | Skill | Use for |
 | --- | --- |
-| [`engineering-model`](skills/engineering-model/) | Revertible-envelope guidance for safe engineering changes, external-effect approval, recoverable commits, proportional tests, Core boundaries, and governed automation controls. |
-| [`ptm`](skills/ptm/) | Popperian Testing Methodology: falsification-first testing for high-assurance code that changes external state, including intent tags, oracle meta-tests, anomaly tests, defensive branches, architecture-boundary scanners, gates, and ratchets. |
+| [`ptm`](skills/ptm/) | Trust in claims: falsification-first testing. A test does not confirm a belief about the code — it attacks it. `Falsifies:` is the default intent; an oracle that cannot fail is worse than no oracle. |
+| [`engineering-model`](skills/engineering-model/) | Trust in actions: burden-of-proof-on-action. Inaction is the safe ground state; an effect that reaches shared or external state must earn explicit approval before it is granted leverage. |
 
 ## Install
 
