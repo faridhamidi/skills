@@ -79,12 +79,9 @@ external effects, executable behavior changes, and other load-bearing engineerin
 
 When changing a skill, edit the canonical folder and reinstall it where needed. Keep repo-specific examples out of reusable skill text. Use real projects to sharpen trigger language and README descriptions, but keep the skill itself portable.
 
-## License status
+## License
 
-This repository currently has no license. Public visibility and these installation
-instructions do not grant third parties permission to redistribute or reuse the contents
-beyond rights provided by applicable law. Add an explicit license only after choosing the
-intended reuse terms.
+MIT. See [LICENSE](LICENSE).
 
 ## Evaluate
 
