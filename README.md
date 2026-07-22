@@ -1,14 +1,10 @@
 # Popperian's Skills
 
-Personal agent skills packaged for both Codex and Claude Code.
+Portable agent skills for Codex, Claude Code, and any runtime that understands the Agent Skills `SKILL.md` folder format.
 
 This is a small skills library for workflows I want agents to run predictably. Each skill is written as a `SKILL.md` plus nearby reference files, so the agent can load the main process first and only open deeper material when the task actually needs it.
 
-The repo is intentionally cross-agent:
-
-- Codex-compatible skills live as top-level folders such as `ptm/`.
-- Claude Code-compatible project skills live under `.claude/skills/`.
-- Mirrored copies are kept byte-identical so both agents read the same instructions.
+The repo keeps one canonical copy of each skill. Runtime-specific folders such as `.claude/skills/<skill-name>/` or `~/.codex/skills/<skill-name>/` are install targets, not source layout.
 
 ## Skills
 
@@ -18,19 +14,25 @@ The repo is intentionally cross-agent:
 
 ## Layout
 
-Each skill is stored twice:
+Each skill is a portable folder:
 
-- `ptm/` - Codex-compatible skill folder.
-- `.claude/skills/ptm/` - Claude Code-compatible project skill folder.
+- `ptm/SKILL.md` - required skill entrypoint.
+- `ptm/*.md` - nearby references loaded only when the skill points to them.
 
-For Codex, copy the top-level skill folder into your Codex skills directory. For Claude Code, copy or keep the `.claude/skills/<skill-name>/` folder in the project where Claude should discover it.
+Install the same folder into the runtime that should discover it:
+
+```bash
+# Codex personal skill
+cp -R ptm ~/.codex/skills/ptm
+
+# Claude Code personal skill
+cp -R ptm ~/.claude/skills/ptm
+
+# Claude Code project skill
+mkdir -p .claude/skills
+cp -R ptm .claude/skills/ptm
+```
 
 ## Maintenance
 
-When changing a skill, update both copies and verify they match:
-
-```bash
-diff -r ptm .claude/skills/ptm
-```
-
-Keep repo-specific examples out of reusable skill text. Use real projects to sharpen trigger language and README descriptions, but keep the skill itself portable.
+When changing a skill, edit the canonical folder and reinstall it where needed. Keep repo-specific examples out of reusable skill text. Use real projects to sharpen trigger language and README descriptions, but keep the skill itself portable.
