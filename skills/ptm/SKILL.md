@@ -5,7 +5,7 @@ description: "Use when writing, reviewing, or adopting high-assurance tests for 
 
 # Popperian Testing Methodology
 
-PTM is falsification-first testing. Each test tries to break a belief, names that belief, proves its oracle can fail, and gates the seam that could otherwise drift.
+PTM is falsification-first: each test tries to break one named belief, proves its oracle can fail, and gates the seam that could otherwise drift.
 
 Use PTM as a hard gate when a changed control-plane, data-mutation, recovery,
 governance, or external-state automation surface can cause consequential state,
@@ -18,11 +18,9 @@ newly protected behavior and its directly affected seams. Do not retrofit unrela
 historical tests or introduce repository-wide scanners, manifests, and ratchets unless
 the change adopts PTM for that broader surface or a concrete bypass risk requires them.
 
-The smell is not "needs more tests." The smell is "a false belief could survive": a retry half-writes state, a scanner never catches its forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
+Look for false beliefs that could survive: a retry half-writes state, a scanner misses a forbidden import, a fake accepts impossible writes, a boundary can be bypassed, or a test says what happens without saying what it falsifies.
 
 ## Hard-Gate Non-Negotiables
-
-These are mandatory for control planes, data mutation, recovery/self-healing, governance tooling, and external-state automation.
 
 - Every new or changed test declares exactly one intent tag: `Falsifies:`, `Regresses:`, or `Confirms:`.
 - Falsification is the default for any sharp contract, decision, invariant, seam, or failure path.
@@ -30,8 +28,6 @@ These are mandatory for control planes, data mutation, recovery/self-healing, go
 - Every external seam gets at least one fault-injection test. Every retry, recovery, or multi-step failure path gets an anomaly test.
 - Every protected architecture seam gets the three-layer boundary pattern: scanner, explicit manifest, scanner meta-tests plus real-file enforcement.
 - Tests must not hit real network, database, cloud SDK, clock, or filesystem services when a unit-level seam exists; use small stateful fakes that enforce the real contract.
-- Run the relevant tests and gates before claiming done.
-
 ## Workflow
 
 1. Discover the repo's current test posture.
@@ -40,19 +36,13 @@ These are mandatory for control planes, data mutation, recovery/self-healing, go
 2. Classify the behavior before writing the test.
    Completion criterion: you have chosen one intent, one target, and one generation strategy from the axes below, and the choice matches the behavior rather than the implementation.
 
-3. Write one vertical test slice.
+3. Write one red vertical slice.
    Completion criterion: the next test is red for the intended reason, names observable behavior through a public interface, and does not depend on private structure.
 
-4. Make the slice green with minimal implementation.
-   Completion criterion: the new test passes, no speculative behavior was added, and existing relevant tests still pass.
+4. Satisfy the triggered PTM obligations.
+   Completion criterion: every applicable hard-gate rule and decision recipe below is reflected in an executable artifact.
 
-5. Add PTM obligations triggered by the slice.
-   Completion criterion: every triggered oracle meta-test, seam fault injection, anomaly loop, defensive-branch bypass, boundary scanner, ratchet, or gate update has been handled.
-
-6. Refactor only while green.
-   Completion criterion: tests remain green after each refactor step, and test names still describe behavior rather than implementation.
-
-7. Verify before done.
+5. Verify the named gates.
    Completion criterion: relevant unit/integration tests, G-BRANCH for pure decision modules, G-BOUNDARY for architectural seams, and any ratchets touched by the change have passed or their failures are reported.
 
 ## The Axes

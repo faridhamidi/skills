@@ -84,3 +84,7 @@ agent process is not automatically a passing outcome: inspect the individual
 `result.json`. One paired run validates the harness and provides a case result; it does
 not establish general skill effectiveness. Repeat cases and trials before making a
 reliability claim.
+
+Use `evals/cases/ptm-retry-recovery-explicit.json` to measure follow-through after an
+intentional `$ptm` invocation. The default case leaves invocation to the model and
+therefore exercises both discovery and follow-through.

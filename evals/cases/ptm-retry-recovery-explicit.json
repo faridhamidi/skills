@@ -1,0 +1,8 @@
+{
+  "id": "ptm-retry-recovery-explicit",
+  "fixture": "evals/fixtures/retry-recovery",
+  "prompt": "Use $ptm. Customers report that a profile update can leave a partially changed record when storage fails. Add appropriate tests and make the retry and recovery behavior safe. Work within this repository and run the relevant tests.",
+  "project_test_command": ["python3", "-m", "unittest", "discover", "-s", "tests", "-v"],
+  "oracle": "evals/oracles/retry_recovery_oracle.py",
+  "failure_token": "fail_on_attempts"
+}
