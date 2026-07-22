@@ -7,9 +7,13 @@ Classify each intended action before performing it:
 - If it touches shared ground, is hard to undo, or is uncertain, fail closed and load
   the installed `engineering-model` skill for the depth the decision earns.
 - Keep agent-authored work recoverable. At coherent, verified task boundaries, commit
-  only task-owned changes with a focused message. Never commit secrets, generated junk,
-  unrelated changes, or pre-existing user work. If the task cannot be isolated safely,
-  leave the work uncommitted and report why.
+  only task-owned changes with a focused message. Before staging, inspect the effective
+  hooks path, relevant hooks, configured filters, and commit-time helpers, including
+  filters that may run during staging. Stage and commit autonomously only when they are
+  known not to perform shared or external effects; otherwise obtain approval or leave the
+  work uncommitted. Do not bypass legitimate controls. Never commit secrets, generated
+  junk, unrelated changes, or pre-existing user work. If the task cannot be isolated
+  safely, leave the work uncommitted and report why.
 - Before relying on git as recovery, verify that the project can create a checkpoint.
   If it cannot, keep the changes local and report the missing recovery mechanism.
 - Before any external-substrate effect, stop and obtain explicit human approval for the

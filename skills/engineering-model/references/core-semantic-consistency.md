@@ -44,7 +44,7 @@ local concept
     -> repository conformance harness
 ```
 
-A direct test is the default. Escalate to the [`Repository Conformance Harness`](CONFORMANCE_HARNESS.md) only when several stable semantic rules need shared discovery, lifecycle, ownership, ratchets, or audit aggregation.
+A direct test is the default. Escalate to the [`Repository Conformance Harness`](core-conformance-harness.md) only when several stable semantic rules need shared discovery, lifecycle, ownership, ratchets, or audit aggregation.
 
 ## Agent procedure
 
@@ -67,6 +67,6 @@ Agents may maintain declarations and evidence that mirror approved behavior. The
 
 ## Governed boundary
 
-Naming an initiator, execution mode, or condition is ordinary Core Hygiene when it improves legibility or testing. Route to the [Governed Automation adoption check](../governed-automation/ADOPTION_CHECK.md) when actor identity, policy applicability, evidence, or operating conditions determine whether a consequential shared or external effect is permitted.
+Naming an initiator, execution mode, or condition is ordinary Core Hygiene when it improves legibility or testing. Route to the [Governed Automation adoption check](governed-adoption-check.md) when actor identity, policy applicability, evidence, or operating conditions determine whether a consequential shared or external effect is permitted.
 
 Core declarations describe and test semantics. Governed Automation owns authority-bearing control selection, authorization, and recovery constraints.

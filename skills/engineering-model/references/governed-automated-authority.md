@@ -8,7 +8,7 @@ The engineering problem becomes:
 
 > How can a machine act repeatedly and quickly without silently acquiring the authority to decide what should be true?
 
-Complete the [`ADOPTION_CHECK.md`](ADOPTION_CHECK.md) before applying the full model. The individual mechanisms and their costs are canonical in [`MODELS.md`](MODELS.md).
+Complete the [`governed-adoption-check.md`](governed-adoption-check.md) before applying the full model. The individual mechanisms and their costs are canonical in [`governed-models.md`](governed-models.md).
 
 ## Seven powers
 
@@ -65,9 +65,9 @@ Each protected power should map to an enforceable identity and permission set:
 - privileged actions emit independently retained audit evidence;
 - where normal recovery cannot address a credible emergency, break-glass access is separate, time-bounded, auditable, and distinct from ordinary recovery.
 
-Workload-identity provisioning, substrate permission policies, credential rotation and revocation, independently retained audit storage, and break-glass authorization and post-use review are production controls outside the executable witness.
+Workload-identity provisioning, substrate permission policies, credential rotation and revocation, independently retained audit storage, and break-glass authorization and post-use review require substrate-level evidence; application structure alone does not prove them.
 
-See [Authority-component security](MODELS.md#10-authority-component-security) for the canonical model.
+See [Authority-component security](governed-models.md#10-authority-component-security) for the canonical model.
 
 ## Core invariants
 
@@ -89,7 +89,3 @@ See [Authority-component security](MODELS.md#10-authority-component-security) fo
 A workflow describes order. An authority model describes who may exercise each power, which evidence is required, which technical identity is allowed, and which bypasses are forbidden.
 
 The distinction matters during failure. A workflow engine may resume at the next step. An authority-aware system must establish whether the next step is still permitted and whether the caller is technically authorized to perform it.
-
-## Executable witness
-
-The dependency-free [`governed_authority_python`](../examples/governed_authority_python/) specimen demonstrates draft isolation, fail-closed validation, sole canonical writing, sole external mutation, runtime role enforcement, idempotent reconciliation, recovery re-entry, and static bypass checks. It is a proof that these constraints are executable, not a production reference architecture. Its [Model 10 coverage matrix](../examples/governed_authority_python/README.md#model-10-coverage) identifies the production security controls it does not demonstrate.

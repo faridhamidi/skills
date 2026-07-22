@@ -1,6 +1,6 @@
 # Governed Automation Models
 
-This file is the canonical source for model definitions. The [decision tree](DECISION_TREE.md) and [vocabulary](VOCABULARY.md) link here rather than restating full mechanisms.
+This file is the canonical source for model definitions. The [decision tree](governed-decision-tree.md) and [vocabulary](governed-vocabulary.md) link here rather than restating full mechanisms.
 
 Select models by trigger. Do not copy the complete set as a starter template.
 
@@ -176,8 +176,6 @@ Select models by trigger. Do not copy the complete set as a starter template.
 - retain audit evidence outside the mutable business record where practical;
 - rotate and revoke credentials without transferring authority to weaker components;
 - where normal recovery cannot address a credible emergency, define a separate, explicit, time-bounded, and auditable break-glass procedure.
-
-**Witness coverage:** the [governed-authority coverage matrix](../examples/governed_authority_python/README.md#model-10-coverage) distinguishes controls executed by the in-memory specimen from production controls that remain documented but unproven here.
 
 **Invariant:** no component can impersonate a stronger power, reuse its credentials, or call the protected substrate directly outside the designated boundary.
 

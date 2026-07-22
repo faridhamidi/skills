@@ -33,6 +33,14 @@ mkdir -p .claude/skills
 cp -R skills/<skill-name> .claude/skills/<skill-name>
 ```
 
+For a public-GitHub install in Codex, invoke the built-in installer with a natural-language
+request such as:
+
+```text
+Use $skill-installer to install https://github.com/faridhamidi/skills/tree/main/skills/engineering-model
+Use $skill-installer to install https://github.com/faridhamidi/skills/tree/main/skills/ptm
+```
+
 Some skills also ship runtime steering assets. `engineering-model` includes
 `assets/AGENTS.md`, `assets/CLAUDE.md`, and `assets/steering.md`; copy the matching
 block into the runtime's always-on instruction file so the skill is loaded before
@@ -48,3 +56,10 @@ external effects, executable behavior changes, and other load-bearing engineerin
 ## Maintenance
 
 When changing a skill, edit the canonical folder and reinstall it where needed. Keep repo-specific examples out of reusable skill text. Use real projects to sharpen trigger language and README descriptions, but keep the skill itself portable.
+
+## License status
+
+This repository currently has no license. Public visibility and these installation
+instructions do not grant third parties permission to redistribute or reuse the contents
+beyond rights provided by applicable law. Add an explicit license only after choosing the
+intended reuse terms.

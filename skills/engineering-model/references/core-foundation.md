@@ -31,7 +31,7 @@ A useful declaration has three properties:
 2. **Behavioral lock** — tests prove the declaration agrees with the implementation.
 3. **Derived use** — validation, gating, logging, documentation, or operator presentation is derived from the declaration where practical.
 
-Start with the vocabulary that is already causing branching or ambiguity. Do not design a complete ontology before the system earns it. See [`SEMANTIC_CONSISTENCY.md`](SEMANTIC_CONSISTENCY.md) when repeated or interacting system language needs a more explicit Core treatment.
+Start with the vocabulary that is already causing branching or ambiguity. Do not design a complete ontology before the system earns it. See [`core-semantic-consistency.md`](core-semantic-consistency.md) when repeated or interacting system language needs a more explicit Core treatment.
 
 ### 3. Preserve execution context across every hop
 
@@ -83,11 +83,11 @@ When a valid boundary has existing violations, enumerate the current set, fail o
 
 ### Level 3 — manifest-backed conformance harness
 
-Escalate when several rules need stable identifiers, common discovery, lifecycle, ratchet state, ownership declarations, paired evidence, historical lineage, and audit aggregation. See [`CONFORMANCE_HARNESS.md`](CONFORMANCE_HARNESS.md).
+Escalate when several rules need stable identifiers, common discovery, lifecycle, ratchet state, ownership declarations, paired evidence, historical lineage, and audit aggregation. See [`core-conformance-harness.md`](core-conformance-harness.md).
 
 ### Level 4 — protected admission or authority control
 
-Repository-host controls govern actual merge admission. If an automated actor can add or weaken blocking rules, approve itself, merge, deploy, override failed checks, or mutate shared systems, complete the [Governed Automation adoption check](../governed-automation/ADOPTION_CHECK.md).
+Repository-host controls govern actual merge admission. If an automated actor can add or weaken blocking rules, approve itself, merge, deploy, override failed checks, or mutate shared systems, complete the [Governed Automation adoption check](governed-adoption-check.md).
 
 ## Proportional adoption
 
@@ -121,7 +121,3 @@ Before the first substantial feature lands, answer:
 - Which two or three tests would prevent the architecture from silently collapsing?
 
 The objective is not architectural purity. It is to make the codebase difficult to misunderstand and cheap to change.
-
-## Executable witness
-
-The dependency-free [`core_boundaries_python`](../examples/core_boundaries_python/) specimen demonstrates three claims from this document: decision code remains independent of an external client, client construction is confined to one integration module, and an operation identifier crosses the service boundary. Its tests are examples of executable constraints, not a required project layout.
