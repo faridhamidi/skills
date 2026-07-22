@@ -39,15 +39,19 @@ everywhere, deliberately.
 Copy the skill folder into the runtime that should discover it.
 
 ```bash
+# Codex project skill
+mkdir -p .codex/skills
+cp -R skills/<skill-name> .codex/skills/<skill-name>
+
+# Claude Code project skill
+mkdir -p .claude/skills
+cp -R skills/<skill-name> .claude/skills/<skill-name>
+
 # Codex personal skill
 cp -R skills/<skill-name> ~/.codex/skills/<skill-name>
 
 # Claude Code personal skill
 cp -R skills/<skill-name> ~/.claude/skills/<skill-name>
-
-# Claude Code project skill
-mkdir -p .claude/skills
-cp -R skills/<skill-name> .claude/skills/<skill-name>
 ```
 
 For a public-GitHub install in Codex, invoke the built-in installer with a natural-language
