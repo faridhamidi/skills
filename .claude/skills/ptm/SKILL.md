@@ -1,5 +1,5 @@
 ---
-name: ftm
+name: ptm
 description: "Use PTM when writing, reviewing, or adopting high-assurance tests for state-changing systems: falsification intent tags, oracle meta-tests, anomaly/recovery tests, architecture-boundary gates, defensive branches, and ratchets."
 ---
 
