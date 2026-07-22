@@ -1,3 +1,5 @@
+![Farid's Skills](ref/header.jpg)
+
 # Farid's Skills
 
 Agent skills I use to make coding agents more predictable.
