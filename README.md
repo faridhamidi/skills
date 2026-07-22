@@ -16,15 +16,17 @@ AI-generated output is not trusted by default. Karl Popper — the philosopher o
 argued that theories are never confirmed, only ever survive attempts to refute them — is the
 root of the posture here: a claim earns belief by surviving an active attempt to break it, not
 by absence of complaint. Corroboration is cheap; "I tried hard to break it and could not" is the
-only evidence that counts. This repo's skills are two applications of that Popperian stance,
-aimed at two different objects — what a system produces, and what a system is permitted to do.
+only evidence that counts. This repo's skills are three applications of that Popperian stance, aimed at three different
+objects — what a system produces, what a system is permitted to do, and what a design claims
+will hold.
 
 ## Skills
 
 | Skill | Use for |
 | --- | --- |
-| [`ptm`](skills/ptm/) | Trust in claims: falsification-first testing. A test does not confirm a belief about the code — it attacks it. `Falsifies:` is the default intent; an oracle that cannot fail is worse than no oracle. |
+| [`ptm`](skills/ptm/) | Trust in claims about code: falsification-first testing. A test does not confirm a belief about the code — it attacks it. `Falsifies:` is the default intent; an oracle that cannot fail is worse than no oracle. |
 | [`engineering-model`](skills/engineering-model/) | Trust in actions: burden-of-proof-on-action. Inaction is the safe ground state; an effect that reaches shared or external state must earn explicit approval before it is granted leverage. |
+| [`reviewing-engineering-designs`](skills/reviewing-engineering-designs/) | Trust in claims about designs: treats an ADR, RFC, or architecture document as a set of falsifiable claims about authority, state, behavior, and operations, and tests whether its mechanisms hold under failure, recovery, and change — not whether the prose reads well. |
 
 ## Install
 
@@ -48,6 +50,7 @@ request such as:
 ```text
 Use $skill-installer to install https://github.com/faridhamidi/skills/tree/main/skills/engineering-model
 Use $skill-installer to install https://github.com/faridhamidi/skills/tree/main/skills/ptm
+Use $skill-installer to install https://github.com/faridhamidi/skills/tree/main/skills/reviewing-engineering-designs
 ```
 
 Some skills also ship runtime steering assets. `engineering-model` includes
